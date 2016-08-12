@@ -2,7 +2,7 @@
   "name": "moviemarathonjs",
   "version": "1.0.0",
   "description": "Utility for calculating optimal movie-watching schedules",
-  "main": "index.js",
+  "main": "moviemarathon.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
