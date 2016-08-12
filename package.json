@@ -1,0 +1,27 @@
+{
+  "name": "moviemarathonjs",
+  "version": "1.0.0",
+  "description": "Utility for calculating optimal movie-watching schedules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francoiscampbell/moviemarathonjs.git"
+  },
+  "keywords": [
+    "movie"
+  ],
+  "author": "Francois Campbell",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/francoiscampbell/moviemarathonjs/issues"
+  },
+  "homepage": "https://github.com/francoiscampbell/moviemarathonjs#readme",
+  "dependencies": {
+    "lodash": "^4.14.2",
+    "moment": "^2.14.1",
+    "request": "^2.74.0"
+  }
+}
