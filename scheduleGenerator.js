@@ -2,7 +2,7 @@ var _ = require('lodash');
 var moment = require('moment');
 var Schedule = require('./schedule');
 
-var defaultOptions = {
+const defaultOptions = {
 	sortByDelay: true,
 	skipPreviews: false,
 	previewLength: moment.duration(15, 'minutes'),
@@ -32,27 +32,6 @@ module.exports = {
 		return possibleSchedules;
 	}
 };
-
-function generateScheduleRecursive(theatre, movies, startTime, possibleSchedules, currentPermutation, options) {
-	if (!movies.length && currentPermutation.length) {
-		var currentSchedule = new Schedule(currentPermutation, theatre);
-		if (validateSchedule(currentSchedule, options)) {
-			possibleSchedules.push(currentSchedule);
-		}
-		return;
-	}
-	movies.forEach(function(movie) {
-		var showtime = null
-		var nextAvailableStartTime = startTime
-		while ((showtime = findNextShowtimeForMovie(theatre, movie, nextAvailableStartTime, options))) {
-			currentPermutation.push(showtime);
-			var remainingMovies = _.filter(movies, function(m) { return m.tmsId !== movie.tmsId });
-			nextAvailableStartTime = moment(showtime.dateTime).add(options.skipPreviews ? options.previewsLength : 0).add(movie.runTime);
-			generateScheduleRecursive(theatre, remainingMovies, nextAvailableStartTime, possibleSchedules, currentPermutation, options);
-			currentPermutation.pop();
-		}
-	});
-}
 
 function reorganizeMoviesIntoModel(movies) {
 	var allTheatres = [];
@@ -88,6 +67,27 @@ function calculatePossibleTheatres(allTheatres, movies) {
 		});
 
 		return movies.length === _.intersection(moviesAtThisTheatre, movies).length;
+	});
+}
+
+function generateScheduleRecursive(theatre, movies, startTime, possibleSchedules, currentPermutation, options) {
+	if (!movies.length && currentPermutation.length) {
+		var currentSchedule = new Schedule(currentPermutation, theatre);
+		if (validateSchedule(currentSchedule, options)) {
+			possibleSchedules.push(currentSchedule);
+		}
+		return;
+	}
+	movies.forEach(function(movie) {
+		var showtime = null
+		var nextAvailableStartTime = startTime
+		while ((showtime = findNextShowtimeForMovie(theatre, movie, nextAvailableStartTime, options))) {
+			currentPermutation.push(showtime);
+			var remainingMovies = _.filter(movies, function(m) { return m.tmsId !== movie.tmsId });
+			nextAvailableStartTime = moment(showtime.dateTime).add(options.skipPreviews ? options.previewsLength : 0).add(movie.runTime);
+			generateScheduleRecursive(theatre, remainingMovies, nextAvailableStartTime, possibleSchedules, currentPermutation, options);
+			currentPermutation.pop();
+		}
 	});
 }
 
